@@ -8,21 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@master
+        uses: actions/checkout@v4
 
       - name: Setup golang
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v5
         with:
-          go-version: 1.14
+          go-version: 1.23
 
       - name: Setup Dependencies
         run: sudo apt-get install libpcap-dev 
            
-        
-
       - name: Cache Go
         id: cache-go
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /home/runner/go
           key: ${{ runner.os }}-go
@@ -39,12 +37,10 @@ jobs:
           go get -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei
         shell: bash
 
-
       - name: Running naabu to check top all ports
         run: |
           naabu -iL input/target.txt  -rate 10000 -p - | tee output/active_ports.txt
         shell: bash
-
 
       - name: Running httpx for HTTP webservers probbing
         run: |
@@ -63,8 +59,8 @@ jobs:
           git add output/active_urls.txt
       - name: Commit results to Github
         run: |
-          git config --local user.email "admin@inbug.org"
-          git config --global user.name "inbug-team"
+          git config --local user.email "1621188252@qq.com"
+          git config --global user.name "Richard-echo"
           git commit -m "InCloud Report" -a --allow-empty
       - name: Push changes
         uses: ad-m/github-push-action@master
